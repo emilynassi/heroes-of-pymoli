@@ -18,7 +18,7 @@ jsondata = os.path.join("Resources","purchase_data.json")
 ```python
 #Read JSON data into a variable
 with open(jsondata) as json_data:
-    d = json.load(json_data)
+    d = pd.read_json(json_data)
 ```
 
 
@@ -169,19 +169,7 @@ purchasing_analysis
 
 
 <div>
-<style>
-    .dataframe thead tr:only-child th {
-        text-align: right;
-    }
 
-    .dataframe thead th {
-        text-align: left;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -226,7 +214,6 @@ final_gender = pd.DataFrame({"Percentage of Players": percentage,
                             "Count":count})
 #Change percentage format and re order columns
 final_gender["Percentage of Players"] = final_gender["Percentage of Players"].map("{:,.2%}".format) 
-final_gender.columns = ["Percentage of Players", "Count"]
 #Print final dataframe
 final_gender
 ```
@@ -240,8 +227,8 @@ final_gender
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Percentage of Players</th>
       <th>Count</th>
+      <th>Percentage of Players</th>
     </tr>
     <tr>
       <th>Gender</th>
@@ -354,7 +341,7 @@ gender_analysis.head()
 cleaned_df = game_df.drop_duplicates("SN")
 
 #The below each broken into bins of 4 years (i.e. <10, 10-14, 15-19, etc.)
-bins = [10, 14, 18, 22, 26, 30, 34, 38, 42]
+bins = [0,9,14,19,24,29,34,39,100]
 groups = ["<10", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40+"]
 
 #Create a  new column for age groups and then groupby Age Groups
@@ -374,10 +361,21 @@ age_demographics = pd.DataFrame({"Total Count": age_purchase,
 
 age_demographics["Percentage of Players"] = age_demographics["Percentage of Players"].map("{:,.2%}".format) 
 
-age_demographics = pd.concat([age_demographics.loc[["<10"],:], age_demographics.drop("<10", axis=0)], axis=0)
+age_demographics = age_demographics.reindex(["<10", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40+"])
 
 age_demographics
 ```
+
+    /anaconda3/envs/PythonData/lib/python3.6/site-packages/ipykernel_launcher.py:10: SettingWithCopyWarning: 
+    A value is trying to be set on a copy of a slice from a DataFrame.
+    Try using .loc[row_indexer,col_indexer] = value instead
+    
+    See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
+      # Remove the CWD from sys.path while we load stuff.
+
+
+
+
 
 <div>
 
@@ -392,38 +390,38 @@ age_demographics
   <tbody>
     <tr>
       <th>&lt;10</th>
-      <td>3.49%</td>
-      <td>20</td>
-    </tr>
-    <tr>
-      <th>15-19</th>
-      <td>31.06%</td>
-      <td>178</td>
-    </tr>
-    <tr>
-      <th>20-24</th>
-      <td>26.70%</td>
-      <td>153</td>
+      <td>3.32%</td>
+      <td>19</td>
     </tr>
     <tr>
       <th>10-14</th>
-      <td>14.66%</td>
-      <td>84</td>
+      <td>4.01%</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>15-19</th>
+      <td>17.45%</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>20-24</th>
+      <td>45.20%</td>
+      <td>259</td>
     </tr>
     <tr>
       <th>25-29</th>
-      <td>7.68%</td>
-      <td>44</td>
+      <td>15.18%</td>
+      <td>87</td>
     </tr>
     <tr>
       <th>30-34</th>
-      <td>5.93%</td>
-      <td>34</td>
+      <td>8.20%</td>
+      <td>47</td>
     </tr>
     <tr>
       <th>35-39</th>
-      <td>4.36%</td>
-      <td>25</td>
+      <td>4.71%</td>
+      <td>27</td>
     </tr>
     <tr>
       <th>40+</th>
@@ -466,7 +464,7 @@ age_analysis = age_analysis[["Purchase Count", "Average Purchase Price", "Total 
 #Move bottom row to the top
 age_analysis = pd.concat([age_analysis.loc[["<10"],:], age_analysis.drop("<10", axis=0)], axis=0)
 
-age_analysis.head()
+age_analysis
 
 ```
 
@@ -488,38 +486,59 @@ age_analysis.head()
   <tbody>
     <tr>
       <th>&lt;10</th>
-      <td>20</td>
-      <td>$2.60</td>
-      <td>$51.99</td>
-      <td>$2.60</td>
+      <td>19</td>
+      <td>$3.13</td>
+      <td>$59.45</td>
+      <td>$3.13</td>
     </tr>
     <tr>
       <th>10-14</th>
-      <td>84</td>
-      <td>$2.89</td>
-      <td>$242.39</td>
-      <td>$2.89</td>
+      <td>23</td>
+      <td>$2.70</td>
+      <td>$62.04</td>
+      <td>$2.70</td>
     </tr>
     <tr>
       <th>15-19</th>
-      <td>178</td>
-      <td>$2.94</td>
-      <td>$523.43</td>
-      <td>$2.94</td>
+      <td>100</td>
+      <td>$2.90</td>
+      <td>$289.88</td>
+      <td>$2.90</td>
     </tr>
     <tr>
       <th>20-24</th>
-      <td>153</td>
-      <td>$3.01</td>
-      <td>$460.79</td>
-      <td>$3.01</td>
+      <td>259</td>
+      <td>$2.96</td>
+      <td>$765.69</td>
+      <td>$2.96</td>
     </tr>
     <tr>
       <th>25-29</th>
-      <td>44</td>
-      <td>$2.98</td>
-      <td>$131.23</td>
-      <td>$2.98</td>
+      <td>87</td>
+      <td>$3.03</td>
+      <td>$263.53</td>
+      <td>$3.03</td>
+    </tr>
+    <tr>
+      <th>30-34</th>
+      <td>47</td>
+      <td>$3.25</td>
+      <td>$152.60</td>
+      <td>$3.25</td>
+    </tr>
+    <tr>
+      <th>35-39</th>
+      <td>27</td>
+      <td>$2.91</td>
+      <td>$78.65</td>
+      <td>$2.91</td>
+    </tr>
+    <tr>
+      <th>40+</th>
+      <td>11</td>
+      <td>$3.11</td>
+      <td>$34.25</td>
+      <td>$3.11</td>
     </tr>
   </tbody>
 </table>
@@ -834,9 +853,7 @@ sorted_items.head(5)
 However, there is only a 13 cent difference in average price spent between male and female, while the average price 
 spent from gender non-diclosed is 30 cents more than males.
 
-2. Teenagers are the majority players of the game, at 30%, while 20-24 year olds make up 26 percent. There is a 19 percent
-drop in players in the next age group, as 25-29 is 7.7%. 20-24 year olds spend more on average, than 15-19 year olds, while 
-30-34 year olds spend the most at $3.35 per transaction.
+2. 20-24 year olds make the most in-app purchases. However, they are 5th in average purchase price. 30-34 year olds spend the most per in-app purchase.
 
 3. The most popular items does not make the game as much money as the most profitable ones. However, 
 the Retribution Axe, which is the most profitable item ties for third on the 
