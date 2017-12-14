@@ -366,17 +366,6 @@ age_demographics = age_demographics.reindex(["<10", "10-14", "15-19", "20-24", "
 age_demographics
 ```
 
-    /anaconda3/envs/PythonData/lib/python3.6/site-packages/ipykernel_launcher.py:10: SettingWithCopyWarning: 
-    A value is trying to be set on a copy of a slice from a DataFrame.
-    Try using .loc[row_indexer,col_indexer] = value instead
-    
-    See the caveats in the documentation: http://pandas.pydata.org/pandas-docs/stable/indexing.html#indexing-view-versus-copy
-      # Remove the CWD from sys.path while we load stuff.
-
-
-
-
-
 <div>
 
 <table border="1" class="dataframe">
